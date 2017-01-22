@@ -1,0 +1,21 @@
+{
+  "name": "Tic-Tac-Toe-JS",
+  "version": "0.0.1",
+  "description": "A tic tac toe game with multiplayer support between two people across the world.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "express",
+    "p5",
+    "socket.io"
+  ],
+  "author": "Akhil Sudhakaran",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "express": "~4.14.0",
+    "socket.io": "~1.7.2"
+  }
+}
