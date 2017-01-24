@@ -39,23 +39,25 @@ function mouseClicked()
 	if(yourTurn)
 	{	
 		yourTurn = 0;
+		alreadySet = 0;
 		x=mouseX;
 		y=mouseY;
-		alreadySet = 0;
-		while(!alreadySet)
+		checkPosition();
+		setsetFlag();
+		if(alreadySet)
 		{
-			checkPosition();
-			setsetFlag();
+			console.log("third");
+			var socketData =
+				{
+					A: arr,
+					X: !xflag,
+					O: !oflag
+				}
+			drawArr(arr);
+			socket.emit('mouse', socketData);
 		}
-		var socketData =
-			{
-				A: arr,
-				X: !xflag,
-				O: !oflag
-			}
-		drawArr(arr);
-		checkArr(arr);
-		socket.emit('mouse', socketData);
+		else
+			yourTurn = 1;
 	}
 }
 
@@ -90,45 +92,49 @@ function setsetFlag()
 		setArray(0,0);
 		alreadySet = 1;
 	}
-	if(position == 1 && arr[0][1] == 0)
+	else if(position == 1 && arr[0][1] == 0)
 	{
 		setArray(0,1);
 		alreadySet = 1;
 	}
-	if(position == 2 && arr[0][2] == 0)
+	else if(position == 2 && arr[0][2] == 0)
 	{
 		setArray(0,2);
 		alreadySet = 1;	
 	}
-	if(position == 3 && arr[1][0] == 0)
+	else if(position == 3 && arr[1][0] == 0)
 	{
 		setArray(1,0);
 		alreadySet = 1;
 	}
-	if(position == 4 && arr[1][1] == 0)
+	else if(position == 4 && arr[1][1] == 0)
 	{
 		setArray(1,1);
 		alreadySet = 1;
 	}
-	if(position == 5 && arr[1][2] == 0)
+	else if(position == 5 && arr[1][2] == 0)
 	{
 		setArray(1,2);
 		alreadySet = 1;
 	}
-	if(position == 6 && arr[2][0] == 0)
+	else if(position == 6 && arr[2][0] == 0)
 	{
 		setArray(2,0);
 		alreadySet = 1;
 	}
-	if(position == 7 && arr[2][1] == 0)
+	else if(position == 7 && arr[2][1] == 0)
 	{
 		setArray(2,1);
 		alreadySet = 1;
 	}
-	if(position == 8 && arr[2][2] == 0)
+	else if(position == 8 && arr[2][2] == 0)
 	{
 		setArray(2,2);
 		alreadySet = 1;
+	}
+	else
+	{
+		alreadySet = 0;
 	}
 }
 
@@ -152,29 +158,48 @@ function drawArr(data)
 				drawO(i,j);
 		}
 	}
+	checkArr();
 }
 
 function checkArr()
 {
-	if(arr[0][0]==arr[0][1]==arr[0][2]=='X' || arr[0][0]==arr[1][0]==arr[2][0]=='X' || 
-		arr[0][1]==arr[1][1]==arr[2][1]=='X' || arr[0][2]==arr[1][2]==arr[2][2]=='X' || 
-		arr[1][0]==arr[1][1]==arr[1][2]=='X' || arr[2][0]==arr[2][1]==arr[2][2]=='X' ||
-		arr[0][0]==arr[1][1]==arr[2][2]=='X' || arr[0][2]==arr[1][1]==arr[2][0]=='X')
+	if((arr[0][0]=='X' && arr[0][1]=='X' && arr[0][2]=='X') || 
+		(arr[0][0]=='X' && arr[1][0]=='X' && arr[2][0]=='X') ||
+		(arr[0][1]=='X' && arr[1][1]=='X' && arr[2][1]=='X') ||
+		(arr[0][2]=='X' && arr[1][2]=='X' && arr[2][2]=='X') ||
+		(arr[1][0]=='X' && arr[1][1]=='X' && arr[1][2]=='X') ||
+		(arr[2][0]=='X' && arr[2][1]=='X' && arr[2][2]=='X') ||
+		(arr[0][0]=='X' && arr[1][1]=='X' && arr[2][2]=='X') ||
+		(arr[0][2]=='X' && arr[1][1]=='X' && arr[2][0]=='X') )
 	{
-		printWin('X');
+		if(xflag == 1)
+			showDialog("YOU WIN");
+		else
+			showDialog("YOU LOSE");
 	}
-	if(arr[0][0]==arr[0][1]==arr[0][2]=='O' || arr[0][0]==arr[1][0]==arr[2][0]=='O' || 
-		arr[0][1]==arr[1][1]==arr[2][1]=='O' || arr[0][2]==arr[1][2]==arr[2][2]=='O' || 
-		arr[1][0]==arr[1][1]==arr[1][2]=='O' || arr[2][0]==arr[2][1]==arr[2][2]=='O' ||
-		arr[0][0]==arr[1][1]==arr[2][2]=='O' || arr[0][2]==arr[1][1]==arr[2][0]=='O')
+	else if((arr[0][0]=='O' && arr[0][1]=='O' && arr[0][2]=='O') || 
+		(arr[0][0]=='O' && arr[1][0]=='O' && arr[2][0]=='O') ||
+		(arr[0][1]=='O' && arr[1][1]=='O' && arr[2][1]=='O') ||
+		(arr[0][2]=='O' && arr[1][2]=='O' && arr[2][2]=='O') ||
+		(arr[1][0]=='O' && arr[1][1]=='O' && arr[1][2]=='O') ||
+		(arr[2][0]=='O' && arr[2][1]=='O' && arr[2][2]=='O') ||
+		(arr[0][0]=='O' && arr[1][1]=='O' && arr[2][2]=='O') ||
+		(arr[0][2]=='O' && arr[1][1]=='O' && arr[2][0]=='O') )
 	{
-		printWin('O');
+		if(xflag == 1)
+			showDialog("YOU WIN");
+		else
+			showDialog("YOU LOSE");
 	}
 }
 
-function printWin(res)
+function showDialog(res)
 {
-
+	fill(51);
+	rect(200,250,200,100,20);
+	fill(255);
+	textSize(20);
+	text(res, 250, 310);
 }
 
 function drawX(i,j)
@@ -231,7 +256,8 @@ function drawX(i,j)
 
 function drawO(i,j)
 {
-	fill(255);
+	stroke(255);
+	fill(51);
 	if(i==0 && j==0)
 	{
 		ellipse(100,100,200,200);
