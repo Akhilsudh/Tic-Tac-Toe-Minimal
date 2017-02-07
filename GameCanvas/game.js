@@ -11,9 +11,16 @@ var arr = [
   [0, 0, 0]
 ];
 var socket;
+//////////////////////
+var sid;
+var rid;
+//////////////////////
+
 
 function setup()
 {
+	socket = io();
+	var div = document.getElementById("urlDiv");
 	createCanvas(600,600);
 	background(51);
 	stroke(255);
@@ -21,16 +28,27 @@ function setup()
 	line(400, 0, 400, 600);
 	line(0, 200, 600, 200);
 	line(0, 400, 600, 400);
-	socket = io.connect('http://192.168.1.142:3030');
+	socket.on('connect', function() {
+    	console.log(socket.id);
+		div.textContent = "http://192.168.1.102:3030/user?id="+socket.id;
+	}); 
+	//socket = io.connect('http://localhost:3030/r');
+	//socket = io.connect('http://192.168.1.142:3030');
 	socket.on('mouse', newTurn);
+	//console.log(socket.io.engine.id);
 }
 
 function newTurn(data)
 {
+	console.log(data);
 	arr = data.A;
 	drawArr(arr);
 	xflag = data.X;
 	oflag = data.O;
+////////////////////////////////////////	
+	sid = data.RID;
+	rid = data.SID;
+////////////////////////////////////////
 	yourTurn = 1;
 }
 
@@ -51,7 +69,9 @@ function mouseClicked()
 				{
 					A: arr,
 					X: !xflag,
-					O: !oflag
+					O: !oflag,
+					SID: sid,
+					RID: rid
 				}
 			drawArr(arr);
 			socket.emit('mouse', socketData);
@@ -186,7 +206,7 @@ function checkArr()
 		(arr[0][0]=='O' && arr[1][1]=='O' && arr[2][2]=='O') ||
 		(arr[0][2]=='O' && arr[1][1]=='O' && arr[2][0]=='O') )
 	{
-		if(xflag == 1)
+		if(oflag == 1)
 			showDialog("YOU WIN");
 		else
 			showDialog("YOU LOSE");
