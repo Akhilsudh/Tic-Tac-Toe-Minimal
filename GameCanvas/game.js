@@ -1,3 +1,5 @@
+//Game-mechanics script
+
 var xflag = 1;
 var oflag = 0;
 var x;
@@ -11,10 +13,9 @@ var arr = [
   [0, 0, 0]
 ];
 var socket;
-//////////////////////
+
 var sid;
 var rid;
-//////////////////////
 
 
 function setup()
@@ -30,12 +31,9 @@ function setup()
 	line(0, 400, 600, 400);
 	socket.on('connect', function() {
     	console.log(socket.id);
-		div.textContent = "http://192.168.1.102:3030/user?id="+socket.id;
+		div.textContent = "http://localhost:3030/user?id="+socket.id;
 	}); 
-	//socket = io.connect('http://localhost:3030/r');
-	//socket = io.connect('http://192.168.1.142:3030');
 	socket.on('mouse', newTurn);
-	//console.log(socket.io.engine.id);
 }
 
 function newTurn(data)
@@ -45,10 +43,8 @@ function newTurn(data)
 	drawArr(arr);
 	xflag = data.X;
 	oflag = data.O;
-////////////////////////////////////////	
 	sid = data.RID;
 	rid = data.SID;
-////////////////////////////////////////
 	yourTurn = 1;
 }
 
